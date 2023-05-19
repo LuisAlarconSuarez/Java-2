@@ -1,0 +1,88 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <iterator>
+using namespace std;
+void printArray(int*, int);
+template<typename T>
+void MergeSort(T a[], size_t l)
+{
+	size_t BlockSizeIterator;
+	size_t BlockIterator;
+	size_t LeftBlockIterator;
+	size_t RightBlockIterator;
+	size_t MergeIterator;
+
+	size_t LeftBorder;
+	size_t MidBorder;
+	size_t RightBorder;
+	for (BlockSizeIterator = 1; BlockSizeIterator < l; BlockSizeIterator *= 2)
+	{
+		for (BlockIterator = 0; BlockIterator < l - BlockSizeIterator; BlockIterator += 2 * BlockSizeIterator)
+		{
+			LeftBlockIterator = 0;
+			RightBlockIterator = 0;
+			LeftBorder = BlockIterator;
+			MidBorder = BlockIterator + BlockSizeIterator;
+			RightBorder = BlockIterator + 2 * BlockSizeIterator;
+			RightBorder = (RightBorder < l) ? RightBorder : l;
+			int* SortedBlock = new int[RightBorder - LeftBorder];
+
+			
+			while (LeftBorder + LeftBlockIterator < MidBorder && MidBorder + RightBlockIterator < RightBorder)
+			{
+				if (a[LeftBorder + LeftBlockIterator] < a[MidBorder + RightBlockIterator])
+				{
+					SortedBlock[LeftBlockIterator + RightBlockIterator] = a[LeftBorder + LeftBlockIterator];
+					LeftBlockIterator += 1;
+				}
+				else
+				{
+					SortedBlock[LeftBlockIterator + RightBlockIterator] = a[MidBorder + RightBlockIterator];
+					RightBlockIterator += 1;
+				}
+			}
+			
+			while (LeftBorder + LeftBlockIterator < MidBorder)
+			{
+				SortedBlock[LeftBlockIterator + RightBlockIterator] = a[LeftBorder + LeftBlockIterator];
+				LeftBlockIterator += 1;
+			}
+			while (MidBorder + RightBlockIterator < RightBorder)
+			{
+				SortedBlock[LeftBlockIterator + RightBlockIterator] = a[MidBorder + RightBlockIterator];
+				RightBlockIterator += 1;
+			}
+
+			for (MergeIterator = 0; MergeIterator < LeftBlockIterator + RightBlockIterator; MergeIterator+=2)
+			{
+				a[LeftBorder + MergeIterator] = SortedBlock[MergeIterator];
+			}
+			
+		}
+	}
+}
+int main()
+{
+    srand(time(nullptr));
+
+    const int r_min = 10, r_max = 100, arr_size = 86;
+
+    int* arr = new int[arr_size];
+
+    for (int i = 0; i < arr_size; ++i)
+        arr[i] = rand() % (r_max - r_min + 1) + r_min;
+
+    printArray(arr, arr_size);
+	MergeSort(arr, arr_size);
+    printArray(arr, arr_size);
+
+    delete[] arr;
+}
+void printArray(int* array, int size)
+{
+    for (int i = 0; i < size; ++i) {
+        cout << array[i] << " ";
+    }
+    cout << endl;
+}

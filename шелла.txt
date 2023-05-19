@@ -1,0 +1,48 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+void shellSort(int*, int);
+void printArray(int*, int);
+
+
+int main()
+{
+    srand(time(nullptr));
+
+    const int r_min = 10, r_max = 100, arr_size = 10;
+
+    int* arr = new int[arr_size];
+
+    for (int i = 0; i < arr_size; ++i)
+        arr[i] = rand() % (r_max - r_min + 1) + r_min;
+
+    printArray(arr, arr_size);
+    shellSort(arr, arr_size);
+    printArray(arr, arr_size);
+
+    delete[] arr;
+}
+void printArray(int* array, int size)
+{
+    for (int i = 0; i < size; ++i) {
+        cout << array[i] << " ";
+    }
+    cout << endl;
+}
+
+void shellSort(int* array, int size){  
+    
+    for(int s = size / 2; s > 0; s /= 2) {
+        for (int i = s; i < size; ++i) {
+                for (int j = i - s; j >= 0 && array[j] > array[j + s]; j -= s)
+                {
+                    int temp = array[j];
+                    array[j] = array[j + s];
+                    array[j + s] = temp;
+                }
+            }
+        }
+    
+}
